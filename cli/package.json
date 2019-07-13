@@ -1,0 +1,11 @@
+{
+  "name": "remote-gcal-cli",
+  "version": "1.0.0",
+  "description": "CLI tool that interacts with wrapper API for Google Calendar ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Trung T. Truong",
+  "license": "MIT"
+}
