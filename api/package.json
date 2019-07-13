@@ -1,0 +1,26 @@
+{
+  "name": "gcal-wrapper-api",
+  "version": "1.0.0",
+  "description": "Wrapper for Google API that interacts with CLI tool",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "googleapis": "^41.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "jsdoc": "^3.6.2",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "start-dev": "NODE_ENV=local nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Trung T. Truong",
+  "license": "MIT"
+}
