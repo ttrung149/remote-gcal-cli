@@ -10,6 +10,8 @@
 //  error handling for the main application
 //  ---------------------------------------------------------
 
+'use strict'
+
 // Third party modules
 const express = require('express');
 const morgan = require('morgan');
@@ -35,8 +37,11 @@ if (process.env.NODE_ENV === 'local') {
 }
 
 // Routes for the application
-app.use('/auth', authRoutes);
-
+app.use('/api/auth', authRoutes);
+app.get('/', (req, res) => {
+    console.log(req.query.code)
+    res.send('got the code');
+})
 // Error handling when content is not reached or error is thrown in routes
 app.use(errorMiddleware.NotFound);
 app.use(errorMiddleware.ServerError);

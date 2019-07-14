@@ -10,6 +10,8 @@
 //  run `npm run setup && npm run start-dev`
 //  ---------------------------------------------------------
 
+'use strict'
+
 const http = require('http');
 const app = require('./app');
 

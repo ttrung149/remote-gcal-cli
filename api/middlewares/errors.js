@@ -9,6 +9,8 @@
 //  from controllers
 //  ---------------------------------------------------------
 
+'use strict'
+
 /**
  * @file middlewares/errors.js 
  * @description returns a 404 (Not Found) error response
