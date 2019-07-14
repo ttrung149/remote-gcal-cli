@@ -16,7 +16,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 // API modules
-const ErrorMiddleware = require('./middlewares/errors');
+const errorMiddleware = require('./middlewares/errors');
+const authRoutes = require('./routes/auth');
 
 require('dotenv').config();
 
@@ -33,8 +34,11 @@ if (process.env.NODE_ENV === 'local') {
     app.use(morgan('dev'));
 }
 
+// Routes for the application
+app.use('/auth', authRoutes);
+
 // Error handling when content is not reached or error is thrown in routes
-app.use(ErrorMiddleware.NotFound);
-app.use(ErrorMiddleware.ServerError);
+app.use(errorMiddleware.NotFound);
+app.use(errorMiddleware.ServerError);
 
 module.exports = app;
