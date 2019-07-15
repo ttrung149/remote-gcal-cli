@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
     console.log(req.query.code)
     res.send('got the code');
 })
+
 // Error handling when content is not reached or error is thrown in routes
 app.use(errorMiddleware.NotFound);
 app.use(errorMiddleware.ServerError);

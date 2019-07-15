@@ -3,10 +3,12 @@
 //  ---------------------------------------------------------
 //  @copyright MIT License. Copyright (c) 2019 - Trung Truong
 //  
-//  @file config/google-api.js  
+//  @file utils/google-api.js  
 // 
 //  @description Configurations for Google API OAuth2.0 Client
 //  ---------------------------------------------------------
+
+'use strict'
 
 // Third party modules
 const { google } = require('googleapis');
@@ -16,7 +18,7 @@ require('dotenv').config();
 const googleConfigs = {
   clientID: process.env.GOOGLE_API_CLIENT_ID,
   clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
-  redirectURL: 'http://localhost' // Redirect URL for CLI tool after user gave permission
+  redirectURL: 'http://localhost:3000' // Redirect URL for CLI tool after user gave permission
 };
 
 /**
