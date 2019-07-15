@@ -13,6 +13,7 @@
 
 // Third party module
 require('dotenv').config();
+const qs = require('querystring');
 
 // API Modules
 const googleConfig = require('../utils/google-api');
@@ -41,16 +42,18 @@ async function validateAuthTokenFromCode(req, res) {
   const code = req.query.code;
 
   try {
+    // get auth access token from google Oauth service
     const authToken = await googleConfig.googleOauth.getToken(code);
     googleConfig.googleOauth.setCredentials(authToken);
 
+    // verify that the access token is valid
     const http = new HTTP();
     http.setAuthorizationHeader('get', authToken.tokens.access_token);
 
     await http.get(gcalroutes.settings);
 
     send200Respond(res, {
-      token: authToken,
+      token: authToken.tokens,
       message: 'Google account authenticated successfully'
     });
   }
@@ -59,7 +62,35 @@ async function validateAuthTokenFromCode(req, res) {
   }
 }
 
+// Get new access token from refresh token
+async function getAuthTokenFromRefreshToken(req, res) {
+  const payload = {
+    client_id: process.env.GOOGLE_API_CLIENT_ID,
+    client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
+    refresh_token: req.body.refreshToken,
+    grant_type: 'refresh_token'
+  };
+
+  try {
+    // Calls Google token API to obtain new auth access token
+    const http = new HTTP();
+    http.setBaseURL(gcalroutes.refreshTokenURL);
+    http.setHttpHeader('post', 'Content-Type', 'application/x-www-form-urlencoded');
+
+    const tokens = await http.post('', qs.stringify(payload));
+
+    send200Respond(res, {
+      message: 'New access token is retrieved',
+      data: tokens.data
+    });
+  }
+  catch (err) {
+    send403Error(res, 'Failed to get new access token from refresh token');
+  }
+}
+
 module.exports = {
   getGoogleAPIAuthUrl,
-  validateAuthTokenFromCode
+  validateAuthTokenFromCode,
+  getAuthTokenFromRefreshToken
 };

@@ -19,5 +19,6 @@ const authController = require('../controllers/auth');
 
 router.get('/oauthUrl', authController.getGoogleAPIAuthUrl);
 router.get('/validateToken', authController.validateAuthTokenFromCode);
+router.post('/refreshToken', authController.getAuthTokenFromRefreshToken);
 
 module.exports = router;
