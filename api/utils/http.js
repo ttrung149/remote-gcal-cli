@@ -8,7 +8,7 @@
 //  @description Configuration for axios to make HTTP calls
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 // Third party modules
 const axios = require('axios');

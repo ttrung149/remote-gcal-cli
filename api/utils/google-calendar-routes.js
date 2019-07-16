@@ -8,10 +8,10 @@
 //  @description Shorten routes for Google Calendar API
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 module.exports = {
   baseUrl: 'https://www.googleapis.com/calendar/v3/',
   settings: 'users/me/settings',
   refreshTokenURL: 'https://www.googleapis.com/oauth2/v4/token'
-}
+};

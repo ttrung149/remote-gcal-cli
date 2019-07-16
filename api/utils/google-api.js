@@ -8,7 +8,7 @@
 //  @description Configurations for Google API OAuth2.0 Client
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 // Third party modules
 const { google } = require('googleapis');
@@ -40,4 +40,4 @@ const googleOauthAuthURL = googleOauth.generateAuthUrl({
 module.exports = {
   googleOauth,
   googleOauthAuthURL
-}
+};

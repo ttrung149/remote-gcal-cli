@@ -9,7 +9,7 @@
 //  to Google Calendar API and interact with CLI client
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 // Third party modules
 const router = require('express').Router();
@@ -18,7 +18,8 @@ const router = require('express').Router();
 const authController = require('../controllers/auth');
 
 router.get('/oauthUrl', authController.getGoogleAPIAuthUrl);
-router.get('/validateToken', authController.validateAuthTokenFromCode);
-router.post('/refreshToken', authController.getAuthTokenFromRefreshToken);
+router.get('/getAuthTokenFromCode', authController.getAuthTokenFromCode);
+router.get('/isTokenValid', authController.isTokenValid);
+router.get('/refreshToken', authController.getAuthTokenFromRefreshToken);
 
 module.exports = router;

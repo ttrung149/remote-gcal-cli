@@ -9,7 +9,7 @@
 //  Calendar API
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 // Third party module
 require('dotenv').config();
@@ -36,9 +36,9 @@ function getGoogleAPIAuthUrl(req, res) {
   }
 }
 
-// Validates authorization Token from Google API using the code
+// Get authorization tokens from Google API using the code
 // attained after CLI client finished granting permissions
-async function validateAuthTokenFromCode(req, res) {
+async function getAuthTokenFromCode(req, res) {
   const code = req.query.code;
 
   try {
@@ -62,12 +62,29 @@ async function validateAuthTokenFromCode(req, res) {
   }
 }
 
+// Validates access token
+async function isTokenValid(req, res) {
+  const accessToken = req.query.access_token;
+
+  try {
+    // verify that the access token is valid
+    const http = new HTTP();
+    http.setAuthorizationHeader('get', accessToken);
+
+    await http.get(gcalroutes.settings);
+    send200Respond(res, 'valid_token');
+  }
+  catch (err) {
+    send200Respond(res, 'invalid_token');
+  }
+}
+
 // Get new access token from refresh token
 async function getAuthTokenFromRefreshToken(req, res) {
   const payload = {
     client_id: process.env.GOOGLE_API_CLIENT_ID,
     client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
-    refresh_token: req.body.refreshToken,
+    refresh_token: req.query.refresh_token,
     grant_type: 'refresh_token'
   };
 
@@ -85,12 +102,13 @@ async function getAuthTokenFromRefreshToken(req, res) {
     });
   }
   catch (err) {
-    send403Error(res, 'Failed to get new access token from refresh token');
+    send200Respond(res, 'invalid_refresh_token');
   }
 }
 
 module.exports = {
   getGoogleAPIAuthUrl,
-  validateAuthTokenFromCode,
+  getAuthTokenFromCode,
+  isTokenValid,
   getAuthTokenFromRefreshToken
 };

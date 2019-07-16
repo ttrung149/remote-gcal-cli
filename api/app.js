@@ -10,7 +10,7 @@
 //  error handling for the main application
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 // Third party modules
 const express = require('express');
@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 
 // Use debugging tools when running local
 if (process.env.NODE_ENV === 'local') {
-    app.use(morgan('dev'));
+  app.use(morgan('dev'));
 }
 
 // Routes for the application

@@ -9,17 +9,17 @@
 //  from controllers
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 /**
  * @file middlewares/errors.js 
  * @description returns a 404 (Not Found) error response
  */
 exports.NotFound = (req, res, next) => {
-  const notFound = new Error("Not Found");
+  const notFound = new Error('Not Found');
   notFound.status = 404;
   next(notFound);
-}
+};
 
 /**
  * @file middlewares/errors.js 
@@ -32,4 +32,4 @@ exports.ServerError = (err, req, res, next) => {
     error: err.message
   });
   next();
-}
+};

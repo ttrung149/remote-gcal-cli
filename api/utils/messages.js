@@ -9,7 +9,7 @@
 //  messages
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 function send400Error(res, message) {
   return res.status(400).json(message);
@@ -29,4 +29,4 @@ module.exports = {
   send400Error,
   send403Error,
   send200Respond
-}
+};

@@ -10,7 +10,7 @@
 //  run `npm run setup && npm run start-dev`
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 const http = require('http');
 const app = require('./app');
@@ -20,5 +20,5 @@ const port = process.env.INDEX_PORT || 8000;
 // Create a server with provided app from app.js
 const server = http.createServer(app);
 
-//Server listening at port env variable or 8000
+// Server listening at port env variable or 8000
 server.listen(port);
