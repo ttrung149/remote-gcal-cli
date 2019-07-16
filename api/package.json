@@ -4,6 +4,7 @@
   "description": "Wrapper for Google API that interacts with CLI tool",
   "main": "index.js",
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
