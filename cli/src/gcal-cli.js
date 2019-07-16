@@ -8,7 +8,7 @@
 //  @description Main src file for CLI tool
 //  ---------------------------------------------------------
 
-'use strict'
+'use strict';
 
 // Third party modules
 const cli = require('commander');
