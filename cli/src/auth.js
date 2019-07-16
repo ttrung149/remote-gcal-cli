@@ -86,6 +86,22 @@ async function authenticate() {
   }
 }
 
+// Logout function: delete credentials store in keychain
+async function logout() {
+  try {
+    const spinner = ora('Logging Out..').start();
+    await removeTokenFromKeyChain('access_token');
+    await removeTokenFromKeyChain('refresh_token');
+
+    spinner.stop();
+    console.log('Logout successfully'.green);
+  }
+  catch (err) {
+    console.log('Failed to logout. Try again!'.bgRed);
+    process.exit(1);
+  }
+};
+
 // Starts a mock server that will listen to the redirect URL with the authentication code
 function startMockServer() {
   const app = express();
@@ -103,7 +119,7 @@ function startMockServer() {
 
         res.send('Exchanged code for authorization token.. This tab can be closed now..');
         server.close(() => {
-          console.log('Google Account authenticated'.green);
+          console.log('\tGoogle account is authenticated'.green);
           spinner.stop();
         });
       }
@@ -117,4 +133,7 @@ function startMockServer() {
   });
 }
 
-module.exports = authenticate;
+module.exports = {
+  authenticate,
+  logout
+};

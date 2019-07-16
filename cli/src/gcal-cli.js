@@ -16,7 +16,7 @@ require('colors');
 
 // CLI modules
 const { version } = require('../package.json');
-const authenticate = require('./auth');
+const { authenticate, logout } = require('./auth');
 
 // CLI init
 cli
@@ -25,7 +25,15 @@ cli
 // Auth commands
 cli
   .command('auth')
-  .description('Authenticate Google Account\n')
-  .action(() => authenticate());
+  .description('Grant CLI access to Google Account')
+  .option('--logout', 'Delete Google credentials for CLI tool')
+  .action((option) => {
+    if (option.logout) {
+      logout();
+    }
+    else {
+      authenticate();
+    }
+  });
 
 cli.parse(process.argv);
