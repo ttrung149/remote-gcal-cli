@@ -25,14 +25,31 @@ class HTTP {
     });
   }
 
-  // call GET Request
+  /**
+   * @description call GET request
+   * @param {string} url 
+   */
   get(url) {
-    return this.http.get(url);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(url)
+        .then(data => resolve(data))
+        .catch(err => reject(new Error(err.message)));
+    });
   }
 
-  // call POST Request
+  /**
+   * @description call POST request
+   * @param {string} url 
+   * @param {Object} data
+   */
   post(url, data) {
-    return this.http.post(url, data);
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(url, data)
+        .then(data => resolve(data))
+        .catch(err => reject(new Error(err.message)));
+    });
   }
 
   // set singular HTTP header
