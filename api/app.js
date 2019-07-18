@@ -20,6 +20,7 @@ const bodyParser = require('body-parser');
 // API modules
 const errorMiddleware = require('./middlewares/errors');
 const authRoutes = require('./routes/auth');
+const calendarsRoutes = require('./routes/calendars');
 
 require('dotenv').config();
 
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV === 'local') {
 
 // Routes for the application
 app.use('/api/auth', authRoutes);
+app.use('/api/calendars', calendarsRoutes);
 
 // Error handling when content is not reached or error is thrown in routes
 app.use(errorMiddleware.NotFound);

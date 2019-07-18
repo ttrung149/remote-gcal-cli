@@ -15,6 +15,10 @@ function send400Error(res, message) {
   return res.status(400).json(message);
 }
 
+function send401Error(res, message) {
+  return res.status(401).json(message);
+}
+
 function send403Error(res, message) {
   return res.status(403).json({
     message: message
@@ -27,6 +31,7 @@ function send200Respond(res, message) {
 
 module.exports = {
   send400Error,
+  send401Error,
   send403Error,
   send200Respond
 };
