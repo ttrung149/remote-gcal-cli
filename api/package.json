@@ -13,15 +13,19 @@
     "googleapis": "^41.0.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "eslint": "^6.0.1",
     "jsdoc": "^3.6.2",
+    "mocha": "^6.2.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
   },
   "scripts": {
     "start": "node index.js",
     "start-dev": "NODE_ENV=local nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "make setup",
+    "test-local": "make test-local",
     "lint": "./node_modules/.bin/eslint ."
   },
   "author": "Trung T. Truong",

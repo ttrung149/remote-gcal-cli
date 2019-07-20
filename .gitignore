@@ -1,3 +1,7 @@
+# Custom config files
+.configs.json
+.credentials.js
+
 # Mac
 DS_Store
 
