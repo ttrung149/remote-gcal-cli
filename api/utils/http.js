@@ -21,7 +21,7 @@ class HTTP {
     this.baseURL = gcalroutes.baseUrl;
     this.http = axios.create({
       baseURL: this.baseURL,
-      timeout: 2000 // default timeout is 2000ms
+      timeout: 5000 // default timeout is 5000ms
     });
   }
 

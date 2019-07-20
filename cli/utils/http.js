@@ -16,7 +16,7 @@ const axios = require('axios');
 class HTTP {
   constructor() {
     this.http = axios.create({
-      timeout: 2000 // default timeout is 2000ms
+      timeout: 5000 // default timeout is 5000ms
     });
   }
 
