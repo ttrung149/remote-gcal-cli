@@ -31,7 +31,10 @@ const authPath = path.resolve(__dirname);
 
 // Configure new axios instance
 const http = new HTTP();
-http.setBaseURL('http://localhost:8000');
+
+if (process.env.NODE_ENV === 'local') {
+  http.setBaseURL('http://localhost:8000');
+}
 
 async function authenticate() {
   try {

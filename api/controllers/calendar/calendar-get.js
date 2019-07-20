@@ -55,10 +55,8 @@ async function getListOfCalendars(req, res) {
     send200Respond(res, listOfCalendars);
   }
   catch (err) {
-    if (err.response) {
-      if (err.response.status === 401) {
-        send401Error(res, 'Invalid credentials');
-      }
+    if (err.message === 'Request failed with status code 401') {
+      send401Error(res, 'Invalid credentials');
     }
     else {
       send400Error(res, err.message);
@@ -98,10 +96,8 @@ async function getCalendarFromId(req, res) {
     send200Respond(res, cal);
   }
   catch (err) {
-    if (err.response) {
-      if (err.response.status === 401) {
-        send401Error(res, 'Invalid credentials');
-      }
+    if (err.message === 'Request failed with status code 401') {
+      send401Error(res, 'Invalid credentials');
     }
     else {
       send400Error(res, err.message);

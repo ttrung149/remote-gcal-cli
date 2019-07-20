@@ -12,22 +12,60 @@
 'use strict';
 
 // Third party modules
-// const path = require('path');
-// const ora = require('ora');
+const path = require('path');
 const Table = require('cli-table3');
+const cliSelect = require('cli-select');
+const fs = require('fs-extra');
 
 // CLI modules
 const HTTP = require('../utils/http');
-const {
-  getTokenFromKeyChain
-} = require('../utils/cli-utils');
+const { getTokenFromKeyChain } = require('../utils/cli-utils');
 
 const http = new HTTP();
-http.setBaseURL('http://localhost:8000');
+
+if (process.env.NODE_ENV === 'local') {
+  http.setBaseURL('http://localhost:8000');
+}
+
+/**
+ * @description checkout calendar from list of calendars
+ */
+async function checkOutCalendar() {
+  try {
+    const accessToken = await getTokenFromKeyChain('access_token');
+    if (!accessToken) {
+      throw new Error('No access token was found. Please run `gcal-cli auth` to authenticate');
+    }
+
+    http.setAuthorizationHeader('get', accessToken);
+    const { data } = await http.get('/api/calendars/list');
+
+    console.log('\nSelect calendar'.cyan);
+    const selection = await cliSelect({
+      values: data.map(calendar => `${calendar.summary}`),
+      selected: '◎'.green,
+      unselected: '○'
+    });
+
+    const pathToConfigCurrentCal = path.resolve(__dirname, '..', '.config', '.currentCalendar.json');
+    fs.outputFileSync(pathToConfigCurrentCal, JSON.stringify(data[selection.id]), 'utf-8');
+    console.log(`Checked out as ${selection.value}`);
+  }
+  catch (err) {
+    if (err.message === 'Request failed with status code 401') {
+      console.log('Invalid credentials. Try `gcal-cli auth`!'.yellow);
+    }
+    else {
+      console.log(err.message);
+    }
+    console.log('Failed to checkout calendar. Try again!'.bgRed);
+    process.exit(1);
+  }
+}
 
 /**
  * @description get all calendars owned by authorized user
- * @param {*} view (--list | --table) 
+ * @param {Boolean} view (--table) 
  */
 async function getListOfCalendars(view) {
   try {
@@ -40,7 +78,7 @@ async function getListOfCalendars(view) {
     const { data } = await http.get('/api/calendars/list');
 
     // display table
-    if (view === 'table') {
+    if (view) {
       const table = new Table({
         head: ['ID', 'Summary', 'Timezone', 'Primary', 'Role'],
         colWidths: [10, 10, 10, 10, 10]
@@ -61,12 +99,15 @@ async function getListOfCalendars(view) {
           console.log(`${key}:`.green, calendar[key]);
         }
       });
-      console.log('\n');
+      console.log('-'.repeat(60));
     }
   }
   catch (err) {
     if (err.message === 'Request failed with status code 401') {
       console.log('Invalid credentials. Try `gcal-cli auth`!'.yellow);
+    }
+    else {
+      console.log(err.message);
     }
     console.log('Failed to get calendar. Try again!'.bgRed);
     process.exit(1);
@@ -74,5 +115,6 @@ async function getListOfCalendars(view) {
 }
 
 module.exports = {
+  checkOutCalendar,
   getListOfCalendars
 };

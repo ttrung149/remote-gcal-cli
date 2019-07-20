@@ -1,9 +1,10 @@
-# Custom config files
+# Custom config files and folders
+.config
 .configs.json
 .credentials.js
 
 # Mac
-DS_Store
+.DS_Store
 
 # Logs
 logs

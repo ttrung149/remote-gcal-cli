@@ -17,7 +17,7 @@ require('colors');
 // CLI modules
 const { version } = require('../package.json');
 const { authenticate, logout } = require('./auth');
-const { getListOfCalendars } = require('./calendars');
+const { checkOutCalendar, getListOfCalendars } = require('./calendars');
 
 // CLI init
 cli
@@ -26,7 +26,7 @@ cli
 // Auth commands
 cli
   .command('auth')
-  .description('Grant CLI access to Google Account'.cyan.underline)
+  .description('Grant CLI access to Google Account'.green)
   .option('--logout', 'Delete Google credentials for CLI tool'.yellow)
   .action((option) => {
     if (option.logout) {
@@ -38,21 +38,22 @@ cli
   });
 
 /** Calendar commands */
+// Switch between calendar
+cli
+  .command('checkout')
+  .description('Checkout calendar to operate'.cyan)
+  .action((option) => {
+    checkOutCalendar();
+  });
+
 // Get calendar
 cli
-  .command('get-calendar [id]')
-  .description('Get all calendars or specific calendar with provided ID'.cyan.underline)
-  .option('--table', 'View as table'.green)
-  .action((id, option) => {
-    if (id) {
-    }
-    else {
-      if (option.table) {
-        getListOfCalendars('table');
-      }
-      else {
-        getListOfCalendars('list');
-      }
-    }
+  .command('get-calendar')
+  .description('Get all calendars'.cyan)
+  .option('--current', 'Get current calendar information')
+  .option('--table', 'View as table')
+  .action((option) => {
+    getListOfCalendars(option.table);
   });
+
 cli.parse(process.argv);
