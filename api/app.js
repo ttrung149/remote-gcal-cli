@@ -14,7 +14,6 @@
 
 // Third party modules
 const express = require('express');
-const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 // API modules
@@ -34,6 +33,7 @@ app.use(bodyParser.json());
 
 // Use debugging tools when running local
 if (process.env.NODE_ENV === 'local') {
+  const morgan = require('morgan');
   app.use(morgan('dev'));
 }
 
