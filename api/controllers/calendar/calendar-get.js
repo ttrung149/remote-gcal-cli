@@ -5,8 +5,8 @@
 //  
 //  @file controllers/calendar/calendar-get.js  
 // 
-//  @description Controller for posting/retrieving data to/from
-//  Google Calendar API Calendars end routes
+//  @description Controller for retrieving data from Google Calendar
+//  API -- calendars GET end routes
 //  ---------------------------------------------------------
 
 'use strict';

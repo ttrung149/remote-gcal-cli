@@ -15,6 +15,7 @@ module.exports = {
   settings: 'users/me/settings',
   refreshTokenURL: 'https://www.googleapis.com/oauth2/v4/token',
   calendar: {
-    list: 'users/me/calendarList'
+    list: 'users/me/calendarList',
+    create: 'calendars'
   }
 };

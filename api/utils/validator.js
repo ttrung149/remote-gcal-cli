@@ -11,6 +11,9 @@
 
 'use strict';
 
+// Third party modules
+const Joi = require('@hapi/joi');
+
 function getValidatedAuthHeader(req) {
   if (req.get('Authorization') !== undefined && req.get('Authorization').length > 2) {
     return req.get('Authorization').split(' ')[1];
@@ -18,6 +21,15 @@ function getValidatedAuthHeader(req) {
   return null;
 }
 
+// Schema for calendar object
+const calendarSchema = Joi.object().keys({
+  summary: Joi.string().min(1).required(),
+  description: Joi.string().min(1),
+  timezone: Joi.string().min(1),
+  location: Joi.string().min(1)
+});
+
 module.exports = {
-  getValidatedAuthHeader
+  getValidatedAuthHeader,
+  calendarSchema
 };

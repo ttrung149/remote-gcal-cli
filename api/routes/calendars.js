@@ -16,8 +16,10 @@ const router = require('express').Router();
 
 // API Modules
 const calendarsGetController = require('../controllers/calendar/calendar-get');
+const calendarsPostController = require('../controllers/calendar/calendar-post');
 
 router.get('/list', calendarsGetController.getListOfCalendars);
 router.get('/list/:id', calendarsGetController.getCalendarFromId);
+router.post('/create', calendarsPostController.createNewCalendar);
 
 module.exports = router;
