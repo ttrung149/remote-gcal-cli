@@ -15,7 +15,7 @@
 const http = require('http');
 const app = require('./app');
 
-const port = process.env.INDEX_PORT || 8000;
+const port = process.env.PORT || 8000;
 
 // Create a server with provided app from app.js
 const server = http.createServer(app);
