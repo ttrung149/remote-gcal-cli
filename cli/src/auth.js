@@ -20,6 +20,8 @@ const ora = require('ora');
 // CLI modules
 const HTTP = require('../utils/http');
 const {
+  localBaseUrl,
+  prodBaseUrl,
   executeCmd,
   setTokenToKeyChain,
   getTokenFromKeyChain,
@@ -33,7 +35,10 @@ const authPath = path.resolve(__dirname);
 const http = new HTTP();
 
 if (process.env.NODE_ENV === 'local') {
-  http.setBaseURL('http://localhost:8000');
+  http.setBaseURL(localBaseUrl);
+}
+else if (process.env.NODE_ENV === 'production') {
+  http.setBaseURL(prodBaseUrl);
 }
 
 async function authenticate() {

@@ -14,6 +14,10 @@
 const childProcess = require('child_process');
 const keytar = require('keytar');
 
+// base Urls
+const localBaseUrl = 'http://localhost:8000';
+const prodBaseUrl = 'https://gcal-wrapper-api.herokuapp.com';
+
 // Execute bash command in node
 function executeCmd(cmd, dir) {
   try {
@@ -41,6 +45,8 @@ function removeTokenFromKeyChain(key) {
 }
 
 module.exports = {
+  localBaseUrl,
+  prodBaseUrl,
   executeCmd,
   setTokenToKeyChain,
   getTokenFromKeyChain,

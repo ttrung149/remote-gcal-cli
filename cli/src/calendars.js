@@ -19,12 +19,19 @@ const fs = require('fs-extra');
 
 // CLI modules
 const HTTP = require('../utils/http');
-const { getTokenFromKeyChain } = require('../utils/cli-utils');
+const {
+  localBaseUrl,
+  prodBaseUrl,
+  getTokenFromKeyChain
+} = require('../utils/cli-utils');
 
 const http = new HTTP();
 
 if (process.env.NODE_ENV === 'local') {
-  http.setBaseURL('http://localhost:8000');
+  http.setBaseURL(localBaseUrl);
+}
+else if (process.env.NODE_ENV === 'production') {
+  http.setBaseURL(prodBaseUrl);
 }
 
 /**
@@ -40,7 +47,7 @@ async function checkOutCalendar() {
     http.setAuthorizationHeader('get', accessToken);
     const { data } = await http.get('/api/calendars/list');
 
-    console.log('\nSelect calendar'.cyan);
+    console.log('Select calendar'.cyan);
     const selection = await cliSelect({
       values: data.map(calendar => `${calendar.summary}`),
       selected: '◎'.green,
@@ -92,7 +99,7 @@ async function getListOfCalendars(view) {
 
     // display list
     else {
-      console.log('\nList of calendars:'.cyan);
+      console.log('List of calendars:'.cyan);
       data.forEach(calendar => {
         console.log('-'.repeat(60));
         for (const key in calendar) {
