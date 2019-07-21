@@ -39,7 +39,7 @@ function getGoogleAPIAuthUrl(req, res) {
 // Get authorization tokens from Google API using the code
 // attained after CLI client finished granting permissions
 async function getAuthTokenFromCode(req, res) {
-  const code = req.query.code;
+  const code = req.body.code;
 
   try {
     // get auth access token from google Oauth service
@@ -64,7 +64,7 @@ async function getAuthTokenFromCode(req, res) {
 
 // Validates access token
 async function isTokenValid(req, res) {
-  const accessToken = req.query.access_token;
+  const accessToken = req.body.access_token;
 
   try {
     // verify that the access token is valid
@@ -84,7 +84,7 @@ async function getAuthTokenFromRefreshToken(req, res) {
   const payload = {
     client_id: process.env.GOOGLE_API_CLIENT_ID,
     client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
-    refresh_token: req.query.refresh_token,
+    refresh_token: req.body.refresh_token,
     grant_type: 'refresh_token'
   };
 

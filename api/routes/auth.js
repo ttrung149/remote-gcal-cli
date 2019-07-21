@@ -18,8 +18,8 @@ const router = require('express').Router();
 const authController = require('../controllers/auth');
 
 router.get('/oauthUrl', authController.getGoogleAPIAuthUrl);
-router.get('/getAuthTokenFromCode', authController.getAuthTokenFromCode);
-router.get('/isTokenValid', authController.isTokenValid);
-router.get('/refreshToken', authController.getAuthTokenFromRefreshToken);
+router.post('/getAuthTokenFromCode', authController.getAuthTokenFromCode);
+router.post('/isTokenValid', authController.isTokenValid);
+router.post('/refreshToken', authController.getAuthTokenFromRefreshToken);
 
 module.exports = router;

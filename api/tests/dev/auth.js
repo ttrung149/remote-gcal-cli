@@ -57,8 +57,8 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
     });
   }, 2000);
 
-  // Test GET /getAuthTokenFromCode route
-  describe('GET /getAuthTokenFromCode', () => {
+  // Test POST /getAuthTokenFromCode route
+  describe('POST /getAuthTokenFromCode', () => {
     const { code, access_token } = require('../.credentials.js');
 
     // @todo: positive test needs refactoring because the code provided are
@@ -70,7 +70,10 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
     xit('POSITIVE: should return correct access token', (done) => {
       chai
         .request(server)
-        .get(`/api/auth/getAuthTokenFromCode?code=${code}`)
+        .post('/api/auth/getAuthTokenFromCode')
+        .send({
+          code: code
+        })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.token.should.be.eql(access_token);
@@ -86,7 +89,10 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
         const code = crypto.randomFillSync(buf).toString('hex');
         chai
           .request(server)
-          .get(`/api/auth/getAuthTokenFromCode?code=${code}`)
+          .post('/api/auth/getAuthTokenFromCode')
+          .send({
+            code: code
+          })
           .end((err, res) => {
             res.should.have.status(403);
             res.body.message.should.be.eql('Failed to authenticate Google account');
@@ -96,15 +102,18 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
     }
   }, 2000);
 
-  // Test GET /isTokenValid route
-  describe('GET /isTokenValid', () => {
+  // Test POST /isTokenValid route
+  describe('POST /isTokenValid', () => {
     const { access_token } = require('../.credentials.js');
 
     // Positive: Should return valid when token is valid
     it('POSITIVE: should return valid when access token is valid', (done) => {
       chai
         .request(server)
-        .get(`/api/auth/isTokenValid?access_token=${access_token}`)
+        .post('/api/auth/isTokenValid')
+        .send({
+          access_token: access_token
+        })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.eql('valid_token');
@@ -119,7 +128,10 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
         const access_token = crypto.randomFillSync(buf).toString('hex');
         chai
           .request(server)
-          .get(`/api/auth/isTokenValid?access_token=${access_token}`)
+          .post('/api/auth/isTokenValid')
+          .send({
+            access_token: access_token
+          })
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.eql('invalid_token');
@@ -129,8 +141,8 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
     }
   }, 2000);
 
-  // Test GET /refreshToken route
-  describe('GET /refreshToken', () => {
+  // Test POST /refreshToken route
+  describe('POST /refreshToken', () => {
     const { refresh_token } = require('../.credentials.js');
 
     // @todo: positive test needs refactoring because the code provided are
@@ -141,11 +153,17 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
     xit('POSITIVE: should return valid access token when provided with valid refresh token', (done) => {
       chai
         .request(server)
-        .get(`/api/auth/refreshToken?refresh_token=${refresh_token}`)
+        .post('/api/auth/refreshToken')
+        .send({
+          refresh_token: refresh_token
+        })
         .end((err, res) => {
           chai
             .request(server)
-            .get(`/api/auth/isTokenValid?access_token=${res.data.data}`)
+            .post('/api/auth/isTokenValid')
+            .send({
+              access_token: res.data.data
+            })
             .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.eql('valid_token');
@@ -161,7 +179,10 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
         const refresh_token = crypto.randomFillSync(buf).toString('hex');
         chai
           .request(server)
-          .get(`/api/auth/refreshToken?refresh_token=${refresh_token}`)
+          .post('/api/auth/refreshToken')
+          .send({
+            refresh_token: refresh_token
+          })
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.eql('invalid_refresh_token');

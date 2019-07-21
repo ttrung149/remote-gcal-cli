@@ -64,12 +64,16 @@ async function authenticate() {
     }
     else {
       // If access token is stored, check if acces token is valid
-      const { data } = await http.get(`/api/auth/isTokenValid?access_token=${accessToken}`);
+      const { data } = await http.post('/api/auth/isTokenValid', {
+        access_token: accessToken
+      });
 
       // Refresh access token if invalid
       if (data === 'invalid_token') {
         console.log('Invalid access token. Attempting to refresh token..'.yellow);
-        const newAccessTokenData = await http.get(`/api/auth/refreshToken?refresh_token=${refreshToken}`);
+        const newAccessTokenData = await http.post('/api/auth/refreshToken', {
+          refresh_token: refreshToken
+        });
 
         // If refresh token is invalid, throw Error, delete stored tokens
         if (newAccessTokenData.data === 'invalid_refresh_token') {
@@ -119,7 +123,9 @@ function startMockServer() {
   const server = app.listen(3000, () => {
     app.get('/oauth/callback', async (req, res) => {
       try {
-        const { data } = await http.get(`/api/auth/getAuthTokenFromCode?code=${req.query.code}`);
+        const { data } = await http.post('/api/auth/getAuthTokenFromCode', {
+          code: req.query.code
+        });
         const spinner = ora('Authenticating..').start();
 
         await setTokenToKeyChain('access_token', data.token.access_token);
