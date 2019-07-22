@@ -82,6 +82,18 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
         });
     });
 
+    // should rejects if authorization code is not provided
+    it('NEGATIVE: should rejects if authorization code is not provided', (done) => {
+      chai
+        .request(server)
+        .post('/api/auth/getAuthTokenFromCode')
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.message.should.be.eql('Failed to authenticate Google account');
+          done();
+        });
+    });
+
     // Negative: Should rejects if authorization code is invalid
     for (let i = 0; i < 5; i++) {
       it(`NEGATIVE: should rejects if authorization code is invalid #${i + 1}`, (done) => {
@@ -121,7 +133,22 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
         });
     });
 
-    // Negative: Should rejects if authorization code is invalid
+    // Negative: Should rejects if access token is invalid
+    it('NEGATIVE: should rejects if access token is not provided', (done) => {
+      chai
+        .request(server)
+        .post('/api/auth/isTokenValid')
+        .send({
+          access_token: ''
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.eql('invalid_token');
+          done();
+        });
+    });
+
+    // Negative: Should rejects if access token is invalid
     for (let i = 0; i < 5; i++) {
       it(`NEGATIVE: should return invalid if token is invalid #${i + 1}`, (done) => {
         const buf = Buffer.alloc(20);
@@ -169,6 +196,18 @@ describe('Test gcal-wrapper-api AUTH routes', () => {
               res.body.should.be.eql('valid_token');
               done();
             });
+        });
+    });
+
+    // NEGATIVE: should return invalid if token is not provided
+    it('NEGATIVE: should return invalid if refresh token is not provided', (done) => {
+      chai
+        .request(server)
+        .post('/api/auth/refreshToken')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.eql('invalid_refresh_token');
+          done();
         });
     });
 

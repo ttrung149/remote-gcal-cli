@@ -19,7 +19,7 @@ const qs = require('querystring');
 const googleConfig = require('../utils/google-api');
 const { send200Respond, send400Error, send403Error } = require('../utils/messages');
 const gcalroutes = require('../utils/google-calendar-routes');
-
+const { accessCodeSchema, accessTokenSchema, refreshTokenSchema } = require('../schemas/auth-schemas');
 const HTTP = require('../utils/http');
 
 // Returns Google API Auth URL to CLI client
@@ -39,11 +39,15 @@ function getGoogleAPIAuthUrl(req, res) {
 // Get authorization tokens from Google API using the code
 // attained after CLI client finished granting permissions
 async function getAuthTokenFromCode(req, res) {
-  const code = req.body.code;
-
   try {
+    // validate access code before exchange code for token
+    const { error, value } = accessCodeSchema.validate({ code: req.body.code });
+    if (error) {
+      throw new Error(error.message);
+    }
+
     // get auth access token from google Oauth service
-    const authToken = await googleConfig.googleOauth.getToken(code);
+    const authToken = await googleConfig.googleOauth.getToken(value.code);
     googleConfig.googleOauth.setCredentials(authToken);
 
     // verify that the access token is valid
@@ -64,12 +68,15 @@ async function getAuthTokenFromCode(req, res) {
 
 // Validates access token
 async function isTokenValid(req, res) {
-  const accessToken = req.body.access_token;
-
   try {
+    // validate access token before exchange code for token
+    const { error, value } = accessTokenSchema.validate({ access_token: req.body.access_token });
+    if (error) {
+      throw new Error(error.message);
+    }
     // verify that the access token is valid
     const http = new HTTP();
-    http.setAuthorizationHeader('get', accessToken);
+    http.setAuthorizationHeader('get', value.access_token);
 
     await http.get(gcalroutes.settings);
     send200Respond(res, 'valid_token');
@@ -81,14 +88,20 @@ async function isTokenValid(req, res) {
 
 // Get new access token from refresh token
 async function getAuthTokenFromRefreshToken(req, res) {
-  const payload = {
-    client_id: process.env.GOOGLE_API_CLIENT_ID,
-    client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
-    refresh_token: req.body.refresh_token,
-    grant_type: 'refresh_token'
-  };
-
   try {
+    // validate refresh token before exchange code for token
+    const { error, value } = refreshTokenSchema.validate({ refresh_token: req.body.refresh_token });
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const payload = {
+      client_id: process.env.GOOGLE_API_CLIENT_ID,
+      client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
+      refresh_token: value.refresh_token,
+      grant_type: 'refresh_token'
+    };
+
     // Calls Google token API to obtain new auth access token
     const http = new HTTP();
     http.setBaseURL(gcalroutes.refreshTokenURL);
