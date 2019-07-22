@@ -3,10 +3,10 @@
 //  ---------------------------------------------------------
 //  @copyright MIT License. Copyright (c) 2019 - Trung Truong
 //  
-//  @file controllers/calendar/calendar-post.js  
+//  @file controllers/calendar/calendar-get.js  
 // 
-//  @description Controller for posting data to Google Calendar
-//  API -- calendar POST end routes
+//  @description Controller for updating data to Google Calendar 
+//  API -- calendars PUT end routes
 //  ---------------------------------------------------------
 
 'use strict';
@@ -16,21 +16,21 @@ const { send200Respond, send400Error, send401Error } = require('../../utils/mess
 
 const { calendar } = require('../../utils/google-calendar-routes');
 const { getValidatedAuthHeader } = require('../../utils/validator');
-const { createCalendarSchema } = require('../../schemas/calendar-schemas');
+const { updateCalendarSchema } = require('../../schemas/calendar-schemas');
 const HTTP = require('../../utils/http');
 
 /**
- * @description create new Calendar with provided inputs
+ * @description update existing calendar with provided inputs
  * @param {*} req 
  * @param {*} res 
  */
-async function createNewCalendar(req, res) {
+async function updateExistingCalendar(req, res) {
   try {
     const http = new HTTP();
     // Validate headers
     const authHeader = getValidatedAuthHeader(req);
     if (authHeader) {
-      http.setAuthorizationHeader('post', authHeader);
+      http.setAuthorizationHeader('put', authHeader);
     }
     else {
       throw new Error('Invalid authorization header');
@@ -38,6 +38,7 @@ async function createNewCalendar(req, res) {
 
     // request body
     const body = {
+      id: req.body.id,
       summary: req.body.summary,
       description: req.body.description,
       timezone: req.body.timezone,
@@ -45,14 +46,14 @@ async function createNewCalendar(req, res) {
     };
 
     // validate request body
-    const { error, value } = createCalendarSchema.validate(body);
+    const { error, value } = updateCalendarSchema.validate(body);
     if (error) {
       throw new Error(error.message);
     }
 
-    const { data } = await http.post(calendar.create, value);
+    const { data } = await http.put(`${calendar.put}/${req.body.id}`, value);
     send200Respond(res, {
-      message: `Calendar "${data.summary}" was created successfully!`,
+      message: `Calendar "${data.summary}" was updated successfully!`,
       data: data
     });
   }
@@ -61,11 +62,11 @@ async function createNewCalendar(req, res) {
       send401Error(res, 'Invalid credentials');
     }
     else {
-      send400Error(res, 'Failed to create calendar. Check provided arguments!');
+      send400Error(res, 'Failed to update calendar. Check provided arguments!');
     }
   }
 }
 
 module.exports = {
-  createNewCalendar
+  updateExistingCalendar
 };

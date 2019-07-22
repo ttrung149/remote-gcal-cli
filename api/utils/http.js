@@ -52,6 +52,34 @@ class HTTP {
     });
   }
 
+  /**
+   * @description call PUT request
+   * @param {string} url 
+   * @param {Object} data
+   */
+  put(url, data) {
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(url, data)
+        .then(data => resolve(data))
+        .catch(err => reject(new Error(err.message)));
+    });
+  }
+
+  /**
+  * @description call DELETE request
+  * @param {string} url 
+  * @param {Object} data
+  */
+  delete(url, data) {
+    return new Promise((resolve, reject) => {
+      this.http
+        .delete(url, data)
+        .then(data => resolve(data))
+        .catch(err => reject(new Error(err.message)));
+    });
+  }
+
   // set singular HTTP header
   setHttpHeader(method, key, value) {
     this.http.defaults.headers[method][key] = value;

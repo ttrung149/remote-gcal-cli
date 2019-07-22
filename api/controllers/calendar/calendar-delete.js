@@ -3,10 +3,10 @@
 //  ---------------------------------------------------------
 //  @copyright MIT License. Copyright (c) 2019 - Trung Truong
 //  
-//  @file controllers/calendar/calendar-post.js  
+//  @file controllers/calendar/calendar-delete.js  
 // 
-//  @description Controller for posting data to Google Calendar
-//  API -- calendar POST end routes
+//  @description Controller for retrieving data from Google Calendar
+//  API -- calendars delete end routes
 //  ---------------------------------------------------------
 
 'use strict';
@@ -16,56 +16,49 @@ const { send200Respond, send400Error, send401Error } = require('../../utils/mess
 
 const { calendar } = require('../../utils/google-calendar-routes');
 const { getValidatedAuthHeader } = require('../../utils/validator');
-const { createCalendarSchema } = require('../../schemas/calendar-schemas');
+const { deleteCalendarSchema } = require('../../schemas/calendar-schemas');
 const HTTP = require('../../utils/http');
 
 /**
- * @description create new Calendar with provided inputs
+ * @description Delete calendar based on provided calendar ID
  * @param {*} req 
  * @param {*} res 
  */
-async function createNewCalendar(req, res) {
+async function deleteCalendar(req, res) {
   try {
     const http = new HTTP();
     // Validate headers
     const authHeader = getValidatedAuthHeader(req);
     if (authHeader) {
-      http.setAuthorizationHeader('post', authHeader);
+      http.setAuthorizationHeader('delete', authHeader);
     }
     else {
       throw new Error('Invalid authorization header');
     }
 
-    // request body
-    const body = {
-      summary: req.body.summary,
-      description: req.body.description,
-      timezone: req.body.timezone,
-      location: req.body.location
-    };
-
     // validate request body
-    const { error, value } = createCalendarSchema.validate(body);
+    const { error, value } = deleteCalendarSchema.validate({ id: req.body.id });
     if (error) {
       throw new Error(error.message);
     }
 
-    const { data } = await http.post(calendar.create, value);
-    send200Respond(res, {
-      message: `Calendar "${data.summary}" was created successfully!`,
-      data: data
-    });
+    // Retrieve data from Google API Calendars/delete route
+    await http.delete(`${calendar.delete}/${value.id}`);
+    send200Respond(res, 'Calendar was deleted successfully!');
   }
   catch (err) {
     if (err.message === 'Request failed with status code 401') {
       send401Error(res, 'Invalid credentials');
     }
+    else if (err.message === 'Request failed with status code 404') {
+      send401Error(res, 'Calendar not found');
+    }
     else {
-      send400Error(res, 'Failed to create calendar. Check provided arguments!');
+      send400Error(res, err.message);
     }
   }
 }
 
 module.exports = {
-  createNewCalendar
+  deleteCalendar
 };
