@@ -22,7 +22,8 @@ const {
   checkOutCalendar,
   getListOfCalendars,
   createNewCalendar,
-  updateSelectedCalendar
+  updateSelectedCalendar,
+  deleteSelectedCalendar
 } = require('./calendars');
 
 // CLI init
@@ -48,8 +49,8 @@ cli
 // Switch between calendar
 cli
   .command('checkout')
-  .description('Checkout calendar to operate'.cyan)
-  .action(async (option) => {
+  .description('Checkout calendar to operate'.magenta)
+  .action(async () => {
     try {
       await checkOutCalendar();
     }
@@ -98,7 +99,7 @@ cli
 // Update calendar
 cli
   .command('update-calendar')
-  .description('Update current calendar'.cyan)
+  .description('Update selected calendar'.cyan)
   .option('--summary <summary>', 'Headline of updated calendar (required)')
   .option('--description [description]', 'Description of updated calendar')
   .option('--timezone [timezone]', 'Timezone of updated calendar (IANA tz format)')
@@ -112,6 +113,19 @@ cli
         timezone: options.timezone,
         location: options.location
       });
+    }
+    catch (err) {
+      process.exit(1);
+    }
+  });
+
+// Delete calendar
+cli
+  .command('delete-calendar')
+  .description('Delete selected calendar'.cyan)
+  .action(() => {
+    try {
+      deleteSelectedCalendar();
     }
     catch (err) {
       process.exit(1);

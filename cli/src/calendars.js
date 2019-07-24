@@ -139,7 +139,7 @@ async function createNewCalendar(calendar) {
 }
 
 /**
- * @description update current calendar
+ * @description update selected calendar
  * @param {Object} calendar
  */
 async function updateSelectedCalendar(calendar) {
@@ -179,9 +179,53 @@ async function updateSelectedCalendar(calendar) {
   }
 }
 
+/**
+ * @description delete selected calendar
+ */
+async function deleteSelectedCalendar(calendar) {
+  try {
+    const accessToken = await getTokenFromKeyChain('access_token');
+    if (!accessToken) {
+      throw new Error('No access token was found. Please run `gcal-cli auth` to authenticate');
+    }
+
+    http.setAuthorizationHeader('get', accessToken);
+    const calendarList = await http.get('/api/calendars/list');
+
+    console.log('Select calendar to be deleted'.cyan);
+    const selection = await cliSelect({
+      values: calendarList.data.map(calendar => `${calendar.summary}`),
+      selected: '◎'.green,
+      unselected: '○'
+    });
+
+    console.log(`Deleting ${selection.value}...`);
+
+    const calendarToDelete = {
+      data: {
+        id: calendarList.data[selection.id].id
+      }
+    };
+
+    http.setAuthorizationHeader('delete', accessToken);
+    http.setHttpHeader('delete', 'Content-Type', 'application/json');
+
+    const { data } = await http.delete('/api/calendars/delete', calendarToDelete);
+    console.log(colors.green(data));
+    process.exit(0);
+  }
+  catch (err) {
+    if (!err) process.exit(1);
+    console.log(err.message);
+    console.log('Failed to delete calendar. Try again!'.bgRed);
+    process.exit(1);
+  }
+}
+
 module.exports = {
   checkOutCalendar,
   getListOfCalendars,
   createNewCalendar,
-  updateSelectedCalendar
+  updateSelectedCalendar,
+  deleteSelectedCalendar
 };

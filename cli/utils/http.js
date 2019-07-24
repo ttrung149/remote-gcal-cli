@@ -70,6 +70,23 @@ class HTTP {
     });
   }
 
+  /**
+   * @description call delete request
+   * @param {string} url 
+   * @param {object} data
+   */
+  delete(url, data) {
+    return new Promise((resolve, reject) => {
+      this.http
+        .delete(url, data)
+        .then(data => resolve(data))
+        .catch(err => {
+          if (err.response.data) reject(new Error(err.response.data));
+          else reject(err);
+        });
+    });
+  }
+
   // set singular HTTP header
   setHttpHeader(method, key, value) {
     this.http.defaults.headers[method][key] = value;
