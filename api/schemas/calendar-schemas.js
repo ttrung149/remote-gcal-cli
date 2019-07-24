@@ -19,7 +19,7 @@ const Joi = require('@hapi/joi');
 const createCalendarSchema = Joi.object().keys({
   summary: Joi.string().min(1).required(),
   description: Joi.string().min(1),
-  timezone: Joi.string().min(1),
+  timeZone: Joi.string().min(1),
   location: Joi.string().min(1)
 });
 
@@ -27,7 +27,7 @@ const updateCalendarSchema = Joi.object().keys({
   id: Joi.string().required(),
   summary: Joi.string().min(1),
   description: Joi.string().min(1),
-  timezone: Joi.string().min(1),
+  timeZone: Joi.string().min(1),
   location: Joi.string().min(1)
 });
 

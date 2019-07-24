@@ -41,7 +41,7 @@ async function updateExistingCalendar(req, res) {
       id: req.body.id,
       summary: req.body.summary,
       description: req.body.description,
-      timezone: req.body.timezone,
+      timeZone: req.body.timezone,
       location: req.body.location
     };
 
@@ -62,7 +62,7 @@ async function updateExistingCalendar(req, res) {
       send401Error(res, 'Invalid credentials');
     }
     else {
-      send400Error(res, 'Failed to update calendar. Check provided arguments!');
+      send400Error(res, 'Failed to update calendar. Check provided arguments and permissions!');
     }
   }
 }

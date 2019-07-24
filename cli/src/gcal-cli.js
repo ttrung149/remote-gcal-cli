@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 //  ---------------------------------------------------------
 //  remote-gcal-cli
 //  ---------------------------------------------------------
@@ -17,7 +18,12 @@ require('colors');
 // CLI modules
 const { version } = require('../package.json');
 const { authenticate, logout } = require('./auth');
-const { checkOutCalendar, getListOfCalendars } = require('./calendars');
+const {
+  checkOutCalendar,
+  getListOfCalendars,
+  createNewCalendar,
+  updateSelectedCalendar
+} = require('./calendars');
 
 // CLI init
 cli
@@ -29,11 +35,12 @@ cli
   .description('Grant CLI access to Google Account'.green)
   .option('--logout', 'Delete Google credentials for CLI tool'.yellow)
   .action((option) => {
-    if (option.logout) {
-      logout();
+    try {
+      if (option.logout) logout();
+      else authenticate();
     }
-    else {
-      authenticate();
+    catch (err) {
+      process.exit(1);
     }
   });
 
@@ -42,8 +49,13 @@ cli
 cli
   .command('checkout')
   .description('Checkout calendar to operate'.cyan)
-  .action((option) => {
-    checkOutCalendar();
+  .action(async (option) => {
+    try {
+      await checkOutCalendar();
+    }
+    catch (err) {
+      process.exit(1);
+    }
   });
 
 // Get calendar
@@ -52,8 +64,58 @@ cli
   .description('Get all calendars'.cyan)
   .option('--current', 'Get current calendar information')
   .option('--table', 'View as table')
-  .action((option) => {
-    getListOfCalendars(option.table);
+  .action(async (option) => {
+    try {
+      await getListOfCalendars(option.table);
+    }
+    catch (err) {
+      process.exit(1);
+    }
+  });
+
+// Create calendar
+cli
+  .command('create-calendar')
+  .description('Create new calendar'.cyan)
+  .option('--summary <summary>', 'Headline of new calendar (required)')
+  .option('--description [description]', 'Description of new calendar')
+  .option('--timezone [timezone]', 'Timezone of new calendar (IANA tz format)')
+  .option('--location [location]', 'Location of new calendar')
+  .action((options) => {
+    try {
+      createNewCalendar({
+        summary: options.summary,
+        description: options.description,
+        timezone: options.timezone,
+        location: options.location
+      });
+    }
+    catch (err) {
+      process.exit(1);
+    }
+  });
+
+// Update calendar
+cli
+  .command('update-calendar')
+  .description('Update current calendar'.cyan)
+  .option('--summary <summary>', 'Headline of updated calendar (required)')
+  .option('--description [description]', 'Description of updated calendar')
+  .option('--timezone [timezone]', 'Timezone of updated calendar (IANA tz format)')
+  .option('--location [location]', 'Location of updated calendar')
+  .action((options) => {
+    try {
+      updateSelectedCalendar({
+        id: null,
+        summary: options.summary,
+        description: options.description,
+        timezone: options.timezone,
+        location: options.location
+      });
+    }
+    catch (err) {
+      process.exit(1);
+    }
   });
 
 cli.parse(process.argv);

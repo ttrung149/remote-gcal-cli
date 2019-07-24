@@ -40,7 +40,7 @@ async function createNewCalendar(req, res) {
     const body = {
       summary: req.body.summary,
       description: req.body.description,
-      timezone: req.body.timezone,
+      timeZone: req.body.timezone,
       location: req.body.location
     };
 

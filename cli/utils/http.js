@@ -29,7 +29,10 @@ class HTTP {
       this.http
         .get(url)
         .then(data => resolve(data))
-        .catch(err => reject(new Error(err.message)));
+        .catch(err => {
+          if (err.response.data) reject(new Error(err.response.data));
+          else reject(err);
+        });
     });
   }
 
@@ -43,7 +46,27 @@ class HTTP {
       this.http
         .post(url, data)
         .then(data => resolve(data))
-        .catch(err => reject(new Error(err.message)));
+        .catch(err => {
+          if (err.response.data) reject(new Error(err.response.data));
+          else reject(err);
+        });
+    });
+  }
+
+  /**
+   * @description call PUT request
+   * @param {string} url 
+   * @param {Object} data
+   */
+  put(url, data) {
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(url, data)
+        .then(data => resolve(data))
+        .catch(err => {
+          if (err.response.data) reject(new Error(err.response.data));
+          else reject(err);
+        });
     });
   }
 

@@ -16,6 +16,7 @@ const path = require('path');
 const Table = require('cli-table3');
 const cliSelect = require('cli-select');
 const fs = require('fs-extra');
+const colors = require('colors');
 
 // CLI modules
 const HTTP = require('../utils/http');
@@ -57,14 +58,10 @@ async function checkOutCalendar() {
     const pathToConfigCurrentCal = path.resolve(__dirname, '..', '.config', '.currentCalendar.json');
     fs.outputFileSync(pathToConfigCurrentCal, JSON.stringify(data[selection.id]), 'utf-8');
     console.log(`Checked out as ${selection.value}`);
+    process.exit(0);
   }
   catch (err) {
-    if (err.message === 'Request failed with status code 401') {
-      console.log('Invalid credentials. Try `gcal-cli auth`!'.yellow);
-    }
-    else {
-      console.log(err.message);
-    }
+    console.log(err.message);
     console.log('Failed to checkout calendar. Try again!'.bgRed);
     process.exit(1);
   }
@@ -108,20 +105,83 @@ async function getListOfCalendars(view) {
       });
       console.log('-'.repeat(60));
     }
+    process.exit(0);
   }
   catch (err) {
-    if (err.message === 'Request failed with status code 401') {
-      console.log('Invalid credentials. Try `gcal-cli auth`!'.yellow);
-    }
-    else {
-      console.log(err.message);
-    }
+    console.log(err.message);
     console.log('Failed to get calendar. Try again!'.bgRed);
+    process.exit(1);
+  }
+}
+
+/**
+ * @description create new calendar
+ * @param {Object} calendar
+ */
+async function createNewCalendar(calendar) {
+  try {
+    const accessToken = await getTokenFromKeyChain('access_token');
+
+    if (!accessToken) {
+      throw new Error('No access token was found. Please run `gcal-cli auth` to authenticate');
+    }
+    http.setAuthorizationHeader('post', accessToken);
+
+    const { data } = await http.post('/api/calendars/create', calendar);
+    console.log(colors.green(data.message));
+    process.exit(0);
+  }
+  catch (err) {
+    console.log(err.message);
+    console.log('Failed to create new calendar. Try again!'.bgRed);
+    process.exit(1);
+  }
+}
+
+/**
+ * @description update current calendar
+ * @param {Object} calendar
+ */
+async function updateSelectedCalendar(calendar) {
+  try {
+    const accessToken = await getTokenFromKeyChain('access_token');
+    if (!accessToken) {
+      throw new Error('No access token was found. Please run `gcal-cli auth` to authenticate');
+    }
+
+    http.setAuthorizationHeader('get', accessToken);
+    const calendarList = await http.get('/api/calendars/list');
+
+    console.log('Select calendar to be updated'.cyan);
+    const selection = await cliSelect({
+      values: calendarList.data.map(calendar => `${calendar.summary}`),
+      selected: '◎'.green,
+      unselected: '○'
+    });
+
+    console.log(`Updating ${selection.value}...`);
+
+    calendar.id = calendarList.data[selection.id].id;
+    if (!calendar.summary) {
+      calendar.summary = calendarList.data[selection.id].summary;
+    }
+
+    http.setAuthorizationHeader('put', accessToken);
+    const { data } = await http.put('/api/calendars/update', calendar);
+    console.log(colors.green(data.message));
+    process.exit(0);
+  }
+  catch (err) {
+    if (!err) process.exit(1);
+    console.log(err.message);
+    console.log('Failed to update calendar. Try again!'.bgRed);
     process.exit(1);
   }
 }
 
 module.exports = {
   checkOutCalendar,
-  getListOfCalendars
+  getListOfCalendars,
+  createNewCalendar,
+  updateSelectedCalendar
 };
