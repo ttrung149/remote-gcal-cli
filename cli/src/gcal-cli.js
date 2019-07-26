@@ -18,13 +18,10 @@ require('colors');
 // CLI modules
 const { version } = require('../package.json');
 const { authenticate, logout } = require('./auth');
-const {
-  checkOutCalendar,
-  getListOfCalendars,
-  createNewCalendar,
-  updateSelectedCalendar,
-  deleteSelectedCalendar
-} = require('./calendars');
+const { checkOutCalendar, getListOfCalendars } = require('./calendar/calendar-get');
+const { createNewCalendar } = require('./calendar/calendar-post');
+const { updateSelectedCalendar } = require('./calendar/calendar-put');
+const { deleteSelectedCalendar } = require('./calendar/calendar-delete');
 
 // CLI init
 cli
@@ -87,7 +84,7 @@ cli
       createNewCalendar({
         summary: options.summary,
         description: options.description,
-        timezone: options.timezone,
+        timeZone: options.timezone,
         location: options.location
       });
     }

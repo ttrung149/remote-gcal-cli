@@ -1,6 +1,8 @@
 //  ---------------------------------------------------------
 //  gcal-wrapper-api
 //  ---------------------------------------------------------
+//  DEPRECATED
+//
 //  @copyright MIT License. Copyright (c) 2019 - Trung Truong
 //  
 //  @file routes/calendars.js  
@@ -15,10 +17,10 @@
 const router = require('express').Router();
 
 // API Modules
-const calendarsGetController = require('../controllers/calendar/calendar-get');
-const calendarsPostController = require('../controllers/calendar/calendar-post');
-const calendarsUpdateController = require('../controllers/calendar/calendar-update');
-const calendarsDeleteController = require('../controllers/calendar/calendar-delete');
+const calendarsGetController = require('../../controllers/calendar/calendar-get');
+const calendarsPostController = require('../../controllers/calendar/calendar-post');
+const calendarsUpdateController = require('../../controllers/calendar/calendar-update');
+const calendarsDeleteController = require('../../controllers/calendar/calendar-delete');
 
 router.get('/list', calendarsGetController.getListOfCalendars);
 router.get('/list/:id', calendarsGetController.getCalendarFromId);
