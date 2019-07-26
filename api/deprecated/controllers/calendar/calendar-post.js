@@ -1,6 +1,8 @@
 //  ---------------------------------------------------------
 //  gcal-wrapper-api
 //  ---------------------------------------------------------
+//  DEPRECATED
+//
 //  @copyright MIT License. Copyright (c) 2019 - Trung Truong
 //  
 //  @file controllers/calendar/calendar-post.js  
@@ -12,12 +14,12 @@
 'use strict';
 
 // API Modules
-const { send200Respond, send400Error, send401Error } = require('../../utils/messages');
+const { send200Respond, send400Error, send401Error } = require('../../../utils/messages');
 
-const { calendar } = require('../../utils/google-calendar-routes');
-const { getValidatedAuthHeader } = require('../../utils/validator');
+const { calendar } = require('../../../utils/google-calendar-routes');
+const { getValidatedAuthHeader } = require('../../../utils/validator');
 const { createCalendarSchema } = require('../../schemas/calendar-schemas');
-const HTTP = require('../../utils/http');
+const HTTP = require('../../../utils/http');
 
 /**
  * @description create new Calendar with provided inputs

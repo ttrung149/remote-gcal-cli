@@ -1,6 +1,8 @@
 //  ---------------------------------------------------------
 //  gcal-wrapper-api
 //  ---------------------------------------------------------
+//  DEPRECATED
+//
 //  @copyright MIT License. Copyright (c) 2019 - Trung Truong
 //  
 //  @file schemas/calendar-schemas.js

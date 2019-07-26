@@ -39,3 +39,7 @@ test-local:
 
 test-auth:
 	./node_modules/mocha/bin/mocha tests/dev/auth.js --exit
+
+deploy:
+	# Running test against production before deploying
+	cd .. && git subtree push --prefix api heroku master
