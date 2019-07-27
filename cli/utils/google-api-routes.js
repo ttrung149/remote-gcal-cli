@@ -17,5 +17,8 @@ module.exports = {
     create: 'calendars',
     put: 'calendars',
     delete: 'calendars'
+  },
+  event: {
+    list: 'calendars'
   }
 };

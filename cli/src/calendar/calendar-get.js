@@ -107,14 +107,12 @@ async function getListOfCalendars(view) {
 
     // display list
     else {
-      console.log('List of calendars:'.cyan);
-      listOfCalendars.forEach(calendar => {
-        console.log('-'.repeat(60));
-        for (const key in calendar) {
-          console.log(`${key}:`.green, calendar[key]);
-        }
+      console.log('List of calendars\n'.cyan.underline);
+      listOfCalendars.forEach((calendar, index) => {
+        console.log(`${index + 1}. `, `${calendar.summary}`.green, '-', calendar.timezone);
+        console.log('Primary:', calendar.primary, '--', 'Role:', calendar.role);
+        console.log('');
       });
-      console.log('-'.repeat(60));
     }
     process.exit(0);
   }

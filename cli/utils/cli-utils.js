@@ -30,6 +30,17 @@ function executeCmd(cmd, dir) {
   }
 }
 
+// Safely require a config file
+function requireConfig(dir) {
+  try {
+    const config = require(dir);
+    return config;
+  } catch (err) {
+    console.log('Please checkout a calendar before proceeding!'.yellow);
+    process.exit(1);
+  }
+}
+
 // Keychain storage for access tokens and refresh tokens
 // Returns a promise
 function setTokenToKeyChain(key, value) {
@@ -48,6 +59,7 @@ module.exports = {
   localBaseUrl,
   prodBaseUrl,
   executeCmd,
+  requireConfig,
   setTokenToKeyChain,
   getTokenFromKeyChain,
   removeTokenFromKeyChain
