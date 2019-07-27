@@ -39,6 +39,7 @@ if (process.env.NODE_ENV === 'local') {
 }
 else if (process.env.NODE_ENV === 'production') {
   http.setBaseURL(prodBaseUrl);
+  http.setRequestTimeout(8000);
 }
 
 async function authenticate() {
@@ -63,6 +64,7 @@ async function authenticate() {
       }
     }
     else {
+      const spinner = ora('Authenticating..').start();
       // If access token is stored, check if acces token is valid
       const { data } = await http.post('/api/auth/isTokenValid', {
         access_token: accessToken
@@ -70,7 +72,7 @@ async function authenticate() {
 
       // Refresh access token if invalid
       if (data === 'invalid_token') {
-        console.log('Invalid access token. Attempting to refresh token..'.yellow);
+        console.log('\nInvalid access token. Attempting to refresh token..'.yellow);
         const newAccessTokenData = await http.post('/api/auth/refreshToken', {
           refresh_token: refreshToken
         });
@@ -83,12 +85,13 @@ async function authenticate() {
         }
         else {
           await setTokenToKeyChain('access_token', newAccessTokenData.data.data.access_token);
-          console.log('Google Account authenticated'.green);
+          console.log('\nGoogle Account authenticated'.green);
         }
       }
       else {
-        console.log('Google Account has already been authenticated'.green);
+        console.log('\nGoogle Account has already been authenticated'.green);
       }
+      spinner.stop();
     }
   }
   catch (err) {
@@ -133,7 +136,7 @@ function startMockServer() {
 
         res.send('Exchanged code for authorization token.. This tab can be closed now..');
         server.close(() => {
-          console.log('\tGoogle account is authenticated'.green);
+          console.log('\nGoogle account is authenticated'.green);
           spinner.stop();
         });
       }

@@ -61,12 +61,15 @@ async function updateSelectedCalendar(calendar) {
   }
   catch (err) {
     if (!err) process.exit(1);
-    else if (err.response.data) {
+    if (err.response) {
       const { error } = err.response.data;
       console.log(error.message);
-      console.log('Failed to update calendar. Try again!'.bgRed);
-      process.exit(1);
     }
+    else {
+      console.log(err.message);
+    }
+    console.log('Failed to update calendar. Try again!'.bgRed);
+    process.exit(1);
   }
 }
 

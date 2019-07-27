@@ -41,8 +41,13 @@ async function createNewCalendar(calendar) {
     process.exit(0);
   }
   catch (err) {
-    const { error } = err.response.data;
-    console.log(error.message);
+    if (err.response) {
+      const { error } = err.response.data;
+      console.log(error.message);
+    }
+    else {
+      console.log(err.message);
+    }
     console.log('Failed to create new calendar. Try again!'.bgRed);
     process.exit(1);
   }

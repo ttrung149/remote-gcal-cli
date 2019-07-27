@@ -53,8 +53,13 @@ async function checkOutCalendar() {
     process.exit(0);
   }
   catch (err) {
-    const { error } = err.response.data;
-    console.log(error.message);
+    if (err.response) {
+      const { error } = err.response.data;
+      console.log(error.message);
+    }
+    else {
+      console.log(err.message);
+    }
     console.log('Failed to checkout calendar. Try again!'.bgRed);
     process.exit(1);
   }
@@ -114,8 +119,13 @@ async function getListOfCalendars(view) {
     process.exit(0);
   }
   catch (err) {
-    const { error } = err.response.data;
-    console.log(error.message);
+    if (err.response) {
+      const { error } = err.response.data;
+      console.log(error.message);
+    }
+    else {
+      console.log(err.message);
+    }
     console.log('Failed to get calendar. Try again!'.bgRed);
     process.exit(1);
   }
