@@ -76,7 +76,6 @@ cli
 cli
   .command('get-calendar')
   .description('Get all calendars'.cyan)
-  .option('--current', 'Get current calendar information')
   .option('--table', 'View as table')
   .action(async (option) => {
     try {
@@ -113,7 +112,7 @@ cli
 cli
   .command('update-calendar')
   .description('Update selected calendar'.cyan)
-  .option('--summary <summary>', 'Headline of updated calendar (required)')
+  .option('--summary [summary]', 'Headline of updated calendar')
   .option('--description [description]', 'Description of updated calendar')
   .option('--timezone [timezone]', 'Timezone of updated calendar (IANA tz format)')
   .option('--location [location]', 'Location of updated calendar')
@@ -214,7 +213,7 @@ cli
     console.log('');
     console.log('   All time are 24 Hours time');
     console.log('');
-    console.log('   --colors: available colors include:');
+    console.log('   --color: available colors include:');
     console.log('   sky, mint, purple, pink, yellow, orange');
     console.log('   turquoise, grey, blue, green, red');
     console.log('');
@@ -228,7 +227,7 @@ cli
   .option('--end <datetime>', 'End of event (MM-DD-YYYY HH:MM)')
   .option('--from <datetime>', 'Updated start of event (MM-DD-YYYY HH:MM)')
   .option('--to <datetime>', 'Updated end of event (MM-DD-YYYY HH:MM)')
-  .option('--summary [summary]', 'Updated headline of created event')
+  .option('--summary [summary]', 'Updated headline of event')
   .option('--color [color]', 'Updated color in color list for event')
   .option('--description [description]', 'Updated description of event')
   .option('--location [location]', 'Updated location of event')
@@ -260,7 +259,7 @@ cli
     console.log('');
     console.log('   All time are 24 Hours time');
     console.log('');
-    console.log('   --colors: available colors include:');
+    console.log('   --color: available colors include:');
     console.log('   sky, mint, purple, pink, yellow, orange');
     console.log('   turquoise, grey, blue, green, red');
     console.log('');
