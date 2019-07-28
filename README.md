@@ -12,7 +12,7 @@ npm install --save remote-gcal-cli
 
 Global (recommended)
 ```sh
-npm install --g remote-gcal-cli
+npm install -g remote-gcal-cli
 ```
 
 ## Docs
