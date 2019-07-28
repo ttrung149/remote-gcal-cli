@@ -208,7 +208,7 @@ cli
     console.log('');
     console.log('Make sure to checkout a valid calendar before getting events'.yellow.underline);
     console.log('');
-    console.log('Required paramters: --summary, --from, --to'.bold);
+    console.log('Required parameters: --summary, --from, --to'.bold);
     console.log('');
     console.log('Default values:'.cyan);
     console.log('');
@@ -254,7 +254,7 @@ cli
     console.log('');
     console.log('Make sure to checkout a valid calendar before getting events'.yellow.underline);
     console.log('');
-    console.log('Required paramters: --start, --end, --from, --to'.bold);
+    console.log('Required parameters: --start, --end, --from, --to'.bold);
     console.log('');
     console.log('Default values:'.cyan);
     console.log('');
@@ -288,7 +288,7 @@ cli
     console.log('');
     console.log('Make sure to checkout a valid calendar before getting events'.yellow.underline);
     console.log('');
-    console.log('Required paramters: --start, --end'.bold);
+    console.log('Required parameters: --start, --end'.bold);
     console.log('');
   });
 

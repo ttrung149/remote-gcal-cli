@@ -124,7 +124,7 @@ async function getListOfEvents(options) {
     else {
       console.log(err.message);
     }
-    console.log('Failed to checkout calendar. Try again!'.bgRed);
+    console.log('Failed to get events. Try again!'.bgRed);
     process.exit(1);
   }
 }

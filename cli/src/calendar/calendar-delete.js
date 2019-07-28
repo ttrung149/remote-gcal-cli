@@ -14,10 +14,13 @@
 
 // Third party modules
 const cliSelect = require('cli-select');
+const fs = require('fs');
+const path = require('path');
 
 // CLI modules
 const HTTP = require('../../utils/http');
 const {
+  requireConfig,
   getTokenFromKeyChain
 } = require('../../utils/cli-utils');
 
@@ -48,6 +51,12 @@ async function deleteSelectedCalendar() {
     console.log(`Deleting ${selection.value}...`);
 
     const calendarToDelete = calendarList.data.items[selection.id].id;
+    const currentCalendar = requireConfig(path.resolve(__dirname, '..', '..', '.config', '.currentCalendar.json'));
+
+    // if deleting calendar that is being checked out, remove config file
+    if (currentCalendar.id === calendarToDelete) {
+      fs.unlinkSync((path.resolve(__dirname, '..', '..', '.config', '.currentCalendar.json')));
+    }
 
     http.setAuthorizationHeader('delete', accessToken);
     http.setHttpHeader('delete', 'Content-Type', 'application/json');
