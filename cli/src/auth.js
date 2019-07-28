@@ -27,6 +27,10 @@ const {
   getTokenFromKeyChain,
   removeTokenFromKeyChain
 } = require('../utils/cli-utils');
+const {
+  baseUrl,
+  settings
+} = require('../utils/google-api-routes');
 
 // File paths
 const authPath = path.resolve(__dirname);
@@ -64,15 +68,25 @@ async function authenticate() {
       }
     }
     else {
-      const spinner = ora('Authenticating..').start();
-      // If access token is stored, check if acces token is valid
-      const { data } = await http.post('/api/auth/isTokenValid', {
-        access_token: accessToken
-      });
+      // If access token is stored, check if access token is valid
+      // @refactor: remove double hop to proxy server then to Google API
+      // by calling Google Calendar API directly
+      const calendarHTTP = new HTTP();
+      calendarHTTP.setBaseURL(baseUrl);
+      calendarHTTP.setAuthorizationHeader('get', accessToken);
 
-      // Refresh access token if invalid
-      if (data === 'invalid_token') {
-        console.log('\nInvalid access token. Attempting to refresh token..'.yellow);
+      await calendarHTTP.get(settings);
+      console.log('Google Account has already been authenticated'.green);
+    }
+  }
+  catch (err) {
+    // Refresh access token if invalid
+    if (err.response) {
+      if (err.response.status === 401) {
+        console.log('Invalid access token. Attempting to refresh token..'.yellow);
+        const spinner = ora('Authenticating..').start();
+
+        const refreshToken = await getTokenFromKeyChain('refresh_token');
         const newAccessTokenData = await http.post('/api/auth/refreshToken', {
           refresh_token: refreshToken
         });
@@ -81,21 +95,21 @@ async function authenticate() {
         if (newAccessTokenData.data === 'invalid_refresh_token') {
           await removeTokenFromKeyChain('access_token');
           await removeTokenFromKeyChain('refresh_token');
-          throw new Error('Refresh token expired. Please run `gcal-cli auth` again!');
+          console.log('\nRefresh token expired. Please run `gcal-cli auth` again!'.red);
+          spinner.stop();
+          process.exit(1);
         }
         else {
           await setTokenToKeyChain('access_token', newAccessTokenData.data.data.access_token);
           console.log('\nGoogle Account authenticated'.green);
+          spinner.stop();
+          process.exit(0);
         }
       }
-      else {
-        console.log('\nGoogle Account has already been authenticated'.green);
-      }
-      spinner.stop();
     }
-  }
-  catch (err) {
-    console.log(err.message);
+    else {
+      console.log(err.message);
+    }
     console.log('Failed to authenticate to Google account. Try again!'.bgRed);
     process.exit(1);
   }

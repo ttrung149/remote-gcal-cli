@@ -1,6 +1,5 @@
 # Custom config files and folders
-.config
-.configs.json
+.currentCalendar.json
 .credentials.js
 
 # Mac
