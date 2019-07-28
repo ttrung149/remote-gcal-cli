@@ -13,6 +13,8 @@
 'use strict';
 
 const http = require('http');
+const https = require('https');
+
 const app = require('./app');
 
 const port = process.env.PORT || 8000;
@@ -21,4 +23,15 @@ const port = process.env.PORT || 8000;
 const server = http.createServer(app);
 
 // Server listening at port env variable or 8000
-server.listen(port);
+server.listen(port, () => {
+  // In production, prevent idling by pinging the 
+  // api once every 10 minutes
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      setInterval(() => {
+        https.get('https://gcal-wrapper-api.herokuapp.com/');
+      }, (600000));
+    }
+    catch (err) { }
+  }
+});
