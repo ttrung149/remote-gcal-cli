@@ -10,11 +10,14 @@
 //  API -- calendars GET end routes
 //  ---------------------------------------------------------
 
+'use strict';
+
 // Third party modules
 const path = require('path');
 const Table = require('cli-table3');
 const cliSelect = require('cli-select');
 const fs = require('fs-extra');
+const colors = require('colors');
 
 // CLI modules
 const HTTP = require('../../utils/http');
@@ -109,8 +112,8 @@ async function getListOfCalendars(view) {
     else {
       console.log('List of calendars\n'.cyan.underline);
       listOfCalendars.forEach((calendar, index) => {
-        console.log(`${index + 1}. `, `${calendar.summary}`.green, '-', calendar.timezone);
-        console.log('Primary:', calendar.primary, '--', 'Role:', calendar.role);
+        console.log(`${index + 1}. `, `${calendar.summary}`.bold.blue, '-', colors.dim(calendar.timezone));
+        console.log(`Primary: ${calendar.primary}`, '--', 'Role:', calendar.role);
         console.log('');
       });
     }

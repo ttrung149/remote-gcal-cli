@@ -10,6 +10,8 @@
 //  API -- event GET end routes
 //  ---------------------------------------------------------
 
+'use strict';
+
 // Third party modules
 const path = require('path');
 const colors = require('colors');
@@ -61,7 +63,9 @@ async function getListOfEvents(options) {
 
     // default maximum number of value returned is 20
     if (!options.maxResults || options.maxResults > 20) {
-      console.log('WARNING: Querying more than 20 events. Only the first 20 events are displayed!'.yellow);
+      if (options.maxResults > 20) {
+        console.log('WARNING: Querying more than 20 events. Only the first 20 events are displayed!'.yellow);
+      }
       constraints.maxResults = 20;
     } else {
       constraints.maxResults = options.maxResults;
@@ -89,18 +93,24 @@ async function getListOfEvents(options) {
         if (event.description.length > 50) {
           description = `${event.description.substring(0, 50)}...`;
         }
+        else {
+          description = event.description;
+        }
       }
       if (event.location) {
         if (event.location.length > 50) {
           location = `${event.location.substring(0, 50)}...`;
         }
+        else {
+          location = event.location;
+        }
       }
       const from = new Date(event.start.dateTime || event.start.date).toLocaleString();
       const to = new Date(event.end.dateTime || event.end.date).toLocaleString();
 
-      console.log(`${index + 1}. `, `${summary}`.green, `- ${description}`.grey);
+      console.log(`${index + 1}. `, `${summary}`.blue.bold, `- ${description}`.dim);
       console.log(`${from} -- ${to}`);
-      console.log(`@ ${location}`.yellow);
+      console.log(`@ ${location}`.green);
       console.log('');
     });
 
