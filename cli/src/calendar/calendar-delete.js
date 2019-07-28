@@ -55,7 +55,7 @@ async function deleteSelectedCalendar() {
 
     // if deleting calendar that is being checked out, remove config file
     if (currentCalendar.id === calendarToDelete) {
-      fs.unlinkSync((path.resolve(__dirname, '..', '..', '.config', '.currentCalendar.json')));
+      fs.writeFileSync(path.resolve(__dirname, '..', '..', '.config', '.currentCalendar.json'), '', 'utf-8');
     }
 
     http.setAuthorizationHeader('delete', accessToken);
