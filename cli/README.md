@@ -49,6 +49,10 @@ There are built-in options
 
 `--location [location]` - Location of new calendar
 
+Example: 
+
+`gcal-cli create-calendar --summary="Calendar #1" --description="test calendar" --timezone="America/New_York" --location="New York"`
+
 ### Update calendar
 
 To update existing calendar, run `gcal-cli update-calendar [options]`
@@ -62,6 +66,10 @@ There are built-in options
 `--timezone [timezone]` - Timezone of updated calendar (IANA tz format)
 
 `--location [location]` - Location of updated calendar
+
+Example: 
+
+`gcal-cli update-calendar --summary="Updated Calendar" --description="test update calendar" --timezone="America/New_York" --location="New York"`
 
 ### Delete calendar
 
@@ -90,6 +98,10 @@ Default values:
 `--to:` datetime at the end of today (24 Hours time)
 
 `--max-result:` 20
+
+Example: 
+
+`gcal-cli get-events --from="08-01-2019 21:00" --to="08-01-2019 22:00" --max-results=10`
 
 ### Create event
 
@@ -122,6 +134,10 @@ All time are 24 Hours time
 `--color`: available colors include:
 sky, mint, purple, pink, yellow, orange
 turquoise, grey, blue, green, red
+
+Example: 
+
+`gcal-cli create-event --summary="test event #1" --from="08-01-2019 21:00" --to="08-01-2019 22:00" --color="blue"`
 
 ### Update event
 
@@ -161,6 +177,10 @@ All time are 24 Hours time
 sky, mint, purple, pink, yellow, orange
 turquoise, grey, blue, green, red
 
+Example
+
+`gcal-cli update-event --summary="test update event #1" --from="08-01-2019 21:00" --to="08-01-2019 22:00" --start="08-01-2019" --end="08-02-2019" --color="blue"`
+
 ### Delete event
 
 To delete an existing event, run `gcal-cli delete-event [options]`
@@ -176,6 +196,10 @@ Start and end options are used to specified the time range of events that is bei
 Make sure to checkout a valid calendar before getting events
 
 Required parameters: `--start`, `--end`
+
+Example: 
+
+`gcal-cli delete-event --start="08-01-2019 21:00" --end="08-01-2019 22:00"`
 
 ### Help
 
