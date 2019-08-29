@@ -25,12 +25,12 @@ const server = http.createServer(app);
 // Server listening at port env variable or 8000
 server.listen(port, () => {
   // In production, prevent idling by pinging the 
-  // api once every 10 minutes
+  // api once every 30 minutes
   if (process.env.NODE_ENV === 'production') {
     try {
       setInterval(() => {
         https.get('https://gcal-wrapper-api.herokuapp.com/');
-      }, (600000));
+      }, (1800000));
     }
     catch (err) { }
   }
