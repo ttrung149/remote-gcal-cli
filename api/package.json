@@ -1,6 +1,6 @@
 {
   "name": "gcal-wrapper-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper for Google API that interacts with CLI tool",
   "main": "index.js",
   "dependencies": {
@@ -10,13 +10,13 @@
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "googleapis": "^41.0.0"
+    "googleapis": "^41.0.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "eslint": "^6.0.1",
-    "jsdoc": "^3.6.2",
+    "jsdoc": "^3.6.3",
     "mocha": "^6.2.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
