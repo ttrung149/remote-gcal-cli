@@ -1,6 +1,6 @@
 {
   "name": "remote-gcal-cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CLI tool that interacts with wrapper API for Google Calendar ",
   "main": "gcal-cli.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "commander": "^2.20.0",
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
-    "keytar": "^4.11.0",
+    "keytar": "^4.13.0",
     "nocache": "^2.1.0",
     "ora": "^3.4.0",
     "path": "^0.12.7"

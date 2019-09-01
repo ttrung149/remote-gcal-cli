@@ -139,7 +139,10 @@ function startMockServer() {
         const spinner = ora('Authenticating..').start();
 
         await setTokenToKeyChain('access_token', data.token.access_token);
-        await setTokenToKeyChain('refresh_token', data.token.refresh_token);
+
+        if (data.token.refresh_token) {
+          await setTokenToKeyChain('refresh_token', data.token.refresh_token);
+        }
 
         res.send('Exchanged code for authorization token.. This tab can be closed now..');
         server.close(() => {
